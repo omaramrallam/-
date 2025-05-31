@@ -1,0 +1,459 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>تحدي السلطان</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+         background: #146b03b8; color: #ebff0e80; 
+            margin: 0;
+            padding: 0;
+            direction: rtl;
+            text-align: right;
+        }
+        .container {
+            max-width: 800px;
+        
+            margin: 20px auto;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 15px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
+        .header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 20px;
+        }
+        .header h1 {
+            color: #2c6e49;
+            font-size: 2.5em;
+            margin: 0;
+        }
+        .logo-right img, .logo-left img {
+            max-width: 150px;
+            height: auto;
+        }
+        .rewards {
+            list-style: none;
+            padding: 0;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+        .rewards li {
+            background-color: #2c6e49;
+            color: #fff;
+            padding: 10px;
+            text-align: center;
+            border-radius: 8px;
+            font-size: 1.1em;
+            transition: transform 0.2s;
+        }
+        .rewards li.active {
+            background-color: #1e4532;
+            transform: scale(1.05);
+        }
+        .game-container {
+            background-color: #1e4532;
+            color: #754c4c;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+        }
+        .game-container h2 {
+            font-size: 1.5em;
+            color: #e6f0ea;
+            margin-bottom: 15px;
+        }
+        .options {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+        }
+        .option-btn {
+            background-color: #2c6e49;
+            color: #fff;
+            border: none;
+            padding: 10px;
+            font-size: 1em;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        .option-btn:hover {
+            background-color: #3d8b5e;
+        }
+        .option-btn.correct {
+            background-color: #27ae60;
+        }
+        .option-btn.wrong {
+            background-color: #c0392b;
+        }
+        .buttons {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+        .buttons button {
+            background-color: #2c6e49;
+            color: #fff;
+            border: none;
+            padding: 12px 25px;
+            font-size: 1.1em;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        .buttons button:hover {
+            background-color: #3d8b5e;
+        }
+        .buttons button.reset-btn {
+            background-color: #c0392b;
+        }
+        .buttons button.reset-btn:hover {
+            background-color: #a93226;
+        }
+        .score {
+            text-align: center;
+            font-size: 1.2em;
+            color: #2c6e49;
+            margin-bottom: 20px;
+        }
+        @media (max-width: 600px) {
+            .container {
+                margin: 10px;
+                padding: 15px;
+            }
+            .header h1 {
+                font-size: 1.8em;
+            }
+            .rewards li {
+                font-size: 0.9em;
+            }
+            .game-container h2 {
+                font-size: 1.2em;
+            }
+            .option-btn {
+                font-size: 0.9em;
+            }
+            .options {
+                grid-template-columns: 1fr;
+            }
+            .logo-right img, .logo-left img {
+                max-width: 100px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="logo-left">
+                <img src="22.png" alt="شعار 2">
+            </div>
+            <h1>تـحـدي افـضـل مـسـتـمـع</h1>
+            <div class="logo-right">
+                <img src="11.png" alt="شعار 1">
+            </div>
+        </div>
+        <div class="score">النقاط الحالية: <span id="score">0</span></div>
+        <ul class="rewards">
+            <li data-value="1000">1,000</li>
+            <li data-value="1500">1,500</li>
+            <li data-value="200">2,000</li>
+            <li data-value="2500">2,500</li>
+            <li data-value="5000">5,000</li>
+            <li data-value="5500">5,500</li>
+            <li data-value="10000">10,000</li>
+              <li data-value="15000">15,000</li>
+            <li data-value="20000">20,000</li>
+            <li data-value="25000">25,000</li>
+            <li data-value="50000">50,000</li>
+            <li data-value="100000">100,000</li>
+            <li data-value="200000">200,000</li>
+            <li data-value="300000">300,000</li>
+            <li data-value="400000">400,000</li>
+            <li data-value="500000">500,000</li>
+            <li data-value="600000">600,000</li>
+            <li data-value="700000">700,000</li>
+            <li data-value="800000">800,000</li>
+            <li data-value="1000000">1,000,000</li>
+        </ul>
+
+        <div class="game-container">
+            <h2 id="question"></h2>
+            <div class="options" id="options"></div>
+        </div>
+
+        <div class="buttons">
+        
+            <button class="reset-btn" onclick="resetGame()">🔄 إعادة</button>
+        </div>
+    </div>
+
+    <script>
+       const questions = [
+    {
+        question: "ما المقصود ببُعد الجذب في التسويق الرقمي؟",
+        options: [
+            { text: "جذب العملاء عبر الإعلانات المستهدفة", correct: true },
+            { text: "تحسين جودة المنتج", correct: false },
+            { text: "تقليل تكاليف الإنتاج", correct: false },
+            { text: "زيادة سرعة التسليم", correct: false }
+        ]
+    },
+    {
+        question: "كيف تسهم الحملات الرقمية في جذب عملاء جدد لأمازون؟",
+        options: [
+            { text: "من خلال الإعلانات المستهدفة على وسائل التواصل", correct: true },
+            { text: "تقليل الأسعار فقط", correct: false },
+            { text: "إغلاق المتاجر الفعلية", correct: false },
+            { text: "تغيير العلامة التجارية", correct: false }
+        ]
+    },
+    {
+        question: "ما القنوات الأكثر فاعلية في مشاركة المحتوى مع عملاء أمازون؟",
+        options: [
+            { text: "وسائل التواصل الاجتماعي", correct: true },
+            { text: "الإعلانات التلفزيونية", correct: false },
+            { text: "البريد العادي", correct: false },
+            { text: "الإعلانات الإذاعية", correct: false }
+        ]
+    },
+    {
+        question: "كيف تقيس أمازون فعالية المشاركة مع العملاء عبر المنصات الرقمية؟",
+        options: [
+            { text: "معدل التفاعل والنقرات", correct: true },
+            { text: "عدد الشكاوى", correct: false },
+            { text: "تكلفة الإعلانات", correct: false },
+            { text: "عدد الموظفين", correct: false }
+        ]
+    },
+    {
+        question: "ما دور التواصل الفوري (مثل الشات بوت) في بناء علاقة مع العميل؟",
+        options: [
+            { text: "تعزيز تجربة العميل بسرعة الاستجابة", correct: true },
+            { text: "تقليل عدد العملاء", correct: false },
+            { text: "زيادة تكاليف التشغيل", correct: false },
+            { text: "إيقاف الحملات الإعلانية", correct: false }
+        ]
+    },
+    {
+        question: "كيف تستخدم أمازون تقنيات البريد الإلكتروني لتعزيز التواصل مع العملاء؟",
+        options: [
+            { text: "إرسال عروض مخصصة", correct: true },
+            { text: "إيقاف الإشعارات", correct: false },
+            { text: "تقليل التفاعل", correct: false },
+            { text: "زيادة الإعلانات التلفزيونية", correct: false }
+        ]
+    },
+    {
+        question: "ما الاستراتيجيات الرقمية التي تستخدمها أمازون للاحتفاظ بالعملاء؟",
+        options: [
+            { text: "برامج الولاء مثل Amazon Prime", correct: true },
+            { text: "تقليل جودة المنتجات", correct: false },
+            { text: "إغلاق مراكز التوزيع", correct: false },
+            { text: "زيادة الأسعار", correct: false }
+        ]
+    },
+    {
+        question: "كيف تؤثر البرامج مثل Amazon Prime على ولاء العميل؟",
+        options: [
+            { text: "تقديم مزايا حصرية", correct: true },
+            { text: "تقليل خيارات الدفع", correct: false },
+            { text: "إيقاف الشحن المجاني", correct: false },
+            { text: "زيادة التكاليف", correct: false }
+        ]
+    },
+    {
+        question: "ما الفرق بين التواصل والمشاركة في سياق التسويق الرقمي؟",
+        options: [
+            { text: "التواصل أحادي والمشاركة تفاعلية", correct: true },
+            { text: "التواصل والمشاركة نفس المفهوم", correct: false },
+            { text: "التواصل يعتمد على التلفزيون", correct: false },
+            { text: "المشاركة تقلل التكاليف", correct: false }
+        ]
+    },
+    {
+        question: "ما أثر استخدام البيانات الشخصية في تخصيص عروض الجذب؟",
+        options: [
+            { text: "زيادة جاذبية العروض", correct: true },
+            { text: "تقليل عدد العملاء", correct: false },
+            { text: "زيادة تكاليف الإعلانات", correct: false },
+            { text: "إيقاف الحملات الرقمية", correct: false }
+        ]
+    },
+    {
+        question: "كيف تسهم القنوات الرقمية في تخفيض التكاليف التشغيلية لأمازون؟",
+        options: [
+            { text: "من خلال الأتمتة والإعلانات المستهدفة", correct: true },
+            { text: "زيادة عدد الموظفين", correct: false },
+            { text: "إغلاق المستودعات", correct: false },
+            { text: "تقليل جودة الخدمة", correct: false }
+        ]
+    },
+    {
+        question: "ما العلاقة بين التسويق الرقمي وتقديم جودة خدمة أفضل؟",
+        options: [
+            { text: "تحسين تجربة العميل", correct: true },
+            { text: "زيادة الأسعار", correct: false },
+            { text: "تقليل خيارات المنتجات", correct: false },
+            { text: "إيقاف خدمة العملاء", correct: false }
+        ]
+    },
+    {
+        question: "كيف تعزز البيانات الضخمة مرونة أمازون في الاستجابة لطلبات السوق؟",
+        options: [
+            { text: "تحليل اتجاهات العملاء", correct: true },
+            { text: "تقليل عدد المنتجات", correct: false },
+            { text: "زيادة تكاليف الإنتاج", correct: false },
+            { text: "إيقاف التسويق", correct: false }
+        ]
+    },
+    {
+        question: "ما تأثير التحليلات الفورية على مرونة قرارات التسويق في أمازون؟",
+        options: [
+            { text: "اتخاذ قرارات أسرع", correct: true },
+            { text: "تقليل عدد العملاء", correct: false },
+            { text: "زيادة تكاليف الإعلانات", correct: false },
+            { text: "إيقاف الحملات", correct: false }
+        ]
+    },
+    {
+        question: "كيف تساعد التقنيات الرقمية أمازون على الالتزام بمواعيد التسليم؟",
+        options: [
+            { text: "تحسين إدارة سلسلة التوريد", correct: true },
+            { text: "تقليل عدد المستودعات", correct: false },
+            { text: "زيادة تكاليف الشحن", correct: false },
+            { text: "إيقاف التوصيل", correct: false }
+        ]
+    },
+    {
+        question: "ما الأداة التي تُستخدم لقياس مدى تشتت آراء العملاء؟",
+        options: [
+            { text: "الانحراف المعياري", correct: true },
+            { text: "المتوسط الحسابي", correct: false },
+            { text: "النسبة المئوية", correct: false },
+            { text: "الرسم البياني", correct: false }
+        ]
+    },
+    {
+        question: "ما الذي يُظهره المتوسط الحسابي المرتفع في تقييم خدمة معينة؟",
+        options: [
+            { text: "رضا عام مرتفع من العملاء", correct: true },
+            { text: "تفاوت كبير في الآراء", correct: false },
+            { text: "عدم رضا العملاء", correct: false },
+            { text: "ضعف البيانات", correct: false }
+        ]
+    },
+    {
+        question: "ما أهمية الرتبة في تحليل نتائج استبيانات أمازون؟",
+        options: [
+            { text: "ترتيب العوامل حسب أولوية العملاء", correct: true },
+            { text: "قياس سرعة التسليم", correct: false },
+            { text: "تحليل الأسعار", correct: false },
+            { text: "تحليل التكاليف التشغيلية", correct: false }
+        ]
+    },
+    {
+        question: "ما تأثير الأهمية النسبية على تفسير نتائج التسويق الرقمي؟",
+        options: [
+            { text: "إبراز العوامل الأكثر تأثيرًا", correct: true },
+            { text: "زيادة حجم العينة", correct: false },
+            { text: "حساب المتوسط فقط", correct: false },
+            { text: "قياس المبيعات", correct: false }
+        ]
+    },
+    {
+        question: "ماذا يعني اتجاه العينة نحو خيار معين بنسبة كبيرة؟",
+        options: [
+            { text: "توجه قوي في آراء العملاء", correct: true },
+            { text: "تشتت في الآراء", correct: false },
+            { text: "قلة البيانات", correct: false },
+            { text: "عدم أهمية السؤال", correct: false }
+        ]
+    }
+];
+
+
+        const rewards = [1000,1500, 2000,2500, 5000,5500, 10000,15000, 20000,25000, 50000, 100000, 200000, 300000, 400000, 500000, 600000, 700000, 800000, 1000000];
+        let currentQuestionIndex = 0;
+        let score = 0;
+
+        function shuffleArray(array) {
+            for (let i = array.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [array[i], array[j]] = [array[j], array[i]];
+            }
+            return array;
+        }
+
+        function loadQuestion() {
+            const questionEl = document.getElementById('question');
+            const optionsEl = document.getElementById('options');
+            const currentQuestion = questions[currentQuestionIndex];
+
+            questionEl.textContent = currentQuestion.question;
+            optionsEl.innerHTML = '';
+
+            const shuffledOptions = shuffleArray([...currentQuestion.options]);
+            shuffledOptions.forEach((option, index) => {
+                const button = document.createElement('button');
+                button.classList.add('option-btn');
+                button.textContent = option.text;
+                button.addEventListener('click', () => checkAnswer(option.correct, button));
+                optionsEl.appendChild(button);
+            });
+
+            updateRewards();
+        }
+
+       function checkAnswer(isCorrect, button) {
+    if (isCorrect) {
+        button.classList.add('correct');
+        score = rewards[currentQuestionIndex];
+        document.getElementById('score').textContent = score.toLocaleString();
+        currentQuestionIndex++;
+        if (currentQuestionIndex < questions.length) {
+            setTimeout(loadQuestion, 1000);
+        } else {
+            alert('مبروك! لقد حصلت على لقب أفضل مستمع!');
+        }
+    } else {
+        button.classList.add('wrong');
+        alert(`للأسف، الإجابة خاطئة! نقاطك: ${score.toLocaleString()}`);
+        setTimeout(resetGame, 1000); // إعادة اللعبة تلقائيًا بعد 1 ثانية
+    }
+}
+                
+            
+        
+
+        function updateRewards() {
+            const rewardItems = document.querySelectorAll('.rewards li');
+            rewardItems.forEach((item, index) => {
+                item.classList.remove('active');
+                if (index === currentQuestionIndex) {
+                    item.classList.add('active');
+                }
+            });
+        }
+
+        function resetGame() {
+            currentQuestionIndex = 0;
+            score = 0;
+            document.getElementById('score').textContent = '0';
+            loadQuestion();
+        }
+
+        // تحميل السؤال الأول عند بدء اللعبة
+        loadQuestion();
+    </script>
+</body>
+</html>
